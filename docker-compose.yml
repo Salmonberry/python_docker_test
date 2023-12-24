@@ -1,0 +1,27 @@
+services:
+  redis:
+    image: redislabs/redismod
+    container_name: redis
+  web:
+    build: .
+    container_name: web
+    command: flask run --host=0.0.0.0 --reload 
+    ports:
+      - 5000:5000
+      - 5678:5678
+    # volumes: 将当前目录（Flask应用程序代码）挂载到容器的/app目录中。这样，当代码发生变化时，无需重新构建镜像即可在容器中看到变化。
+    # .:/app 与 Dockerfile的COPY . ./app的区别
+    # .:/app
+    # 此配置在容器运行时使用，而不是在映像生成期间使用。
+    # 它建立绑定挂载或卷挂载，其中主机 （.） 上的当前目录挂载到正在运行的容器内的 /app 目录。
+    # 在主机上所做的更改将反映在容器内，反之亦然。
+    # Dockerfile的COPY . ./app
+    # 此命令在映像（Image build）构建过程中使用。
+    # 它将当前目录（在主机上）的内容复制到 Docker 映像内的 /app 目录中。
+    # 复制的文件将成为图像本身的一部分。
+    volumes:
+      - .:/app
+    # depends_on: 指定web服务依赖于redis服务。这确保在启动web服务之前，redis服务已经启动。
+    # 请注意，depends_on并不等待服务变为“就绪”状态，它只确保在依赖服务之前启动服务。对于依赖于数据库等服务的应用，可能需要使用额外的工具（例如wait-for-it或dockerize）在启动依赖服务之前等待服务就绪。
+    depends_on:
+      - redis

@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "python-docker-test"
+version = "0.1.0"
+description = ""
+authors = ["Dark Salmonberry <sos2012happy@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+Flask = "^3.0.0"
+redis = "^5.0.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
